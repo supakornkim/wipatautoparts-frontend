@@ -57,11 +57,11 @@ function Topbar(props: Props) {
                             <FormattedMessage id="LINK_CONTACTS" />
                         </AppLink>
                     </div>
-                    <div className="topbar__item-text">
+                    {/* <div className="topbar__item-text">
                         <AppLink href={url.pageStoreLocation()} className="topbar__link">
                             <FormattedMessage id="LINK_STORE_LOCATION" />
                         </AppLink>
-                    </div>
+                    </div> */}
                     <div className="topbar__item-text">
                         <AppLink href={url.trackOrder()} className="topbar__link">
                             <FormattedMessage id="LINK_TRACK_ORDER" />

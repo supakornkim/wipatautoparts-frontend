@@ -2,7 +2,7 @@
 import { ICurrency } from '~/interfaces/currency';
 
 const dataShopCurrencies: ICurrency[] = [
-    {
+    /*{
         code: 'EUR',
         symbol: '€',
         name: 'Euro',
@@ -13,7 +13,7 @@ const dataShopCurrencies: ICurrency[] = [
         symbol: '£',
         name: 'Pound Sterling',
         rate: 0.78,
-    },
+    },*/
     {
         code: 'USD',
         symbol: '$',
@@ -21,14 +21,20 @@ const dataShopCurrencies: ICurrency[] = [
         rate: 1,
     },
     {
+        code: 'THB',
+        symbol: '฿',
+        name: 'BAHT',
+        rate: 1,
+    },
+    /*{
         code: 'RUB',
         symbol: '₽',
         name: 'Russian Ruble',
         rate: 64,
-    },
+    },*/
 ];
 
-const dataShopDefaultCurrencyCode = 'USD';
+const dataShopDefaultCurrencyCode = 'THB';
 
 export const dataShopDefaultCurrency: ICurrency = dataShopCurrencies.find((x) => (
     x.code === dataShopDefaultCurrencyCode
