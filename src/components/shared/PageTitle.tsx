@@ -14,7 +14,7 @@ function PageTitle(props: Props) {
             <title>
                 {title}
                 {title ? ' — ' : ''}
-                RedParts
+                วิพัฒน์ อะไหล่ยนต์
             </title>
         </Head>
     );
