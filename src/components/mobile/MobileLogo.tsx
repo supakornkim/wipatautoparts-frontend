@@ -1,18 +1,12 @@
 // react
 import React from 'react';
-import Image from 'next/image'; 
+import AppImage from '~/components/shared/AppImage'; 
 
 function MobileLogo() {
     return (
         <div className="mobile-logo">
             {/* mobile-logo */}
-            <Image
-                src="/images/Logo-wipat.png"
-                alt="วิพัฒน์ อะไหล่ยนต์"
-                width={160}
-                height={50}
-                priority
-                                />
+            <AppImage src="/images/Logo-wipat.png" alt="วิพัฒน์ อะไหล่ยนต์" />
             {/* mobile-logo / end */}
         </div>
     );
