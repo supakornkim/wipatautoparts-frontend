@@ -75,9 +75,9 @@ function Header() {
                     <div className="header__navbar-phone phone">
                         <AppLink href={url.pageContactUs()} className="phone__body">
                             <div className="phone__title">
-                                <FormattedMessage id="TEXT_CALL_US" />
+                                <FormattedMessage id="Line" />
                             </div>
-                            <div className="phone__number">800 060-0730</div>
+                            <div className="phone__number">@wipat</div>
                         </AppLink>
                     </div>
                 )}

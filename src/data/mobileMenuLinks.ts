@@ -2,51 +2,24 @@
 import { IMobileMenuLink } from '~/interfaces/mobile-menu-link';
 
 const dataMobileMenuLinks: IMobileMenuLink[] = [
+    { title: 'หน้าแรก', url: '/' },
     {
-        title: 'Home',
-        url: '/',
-        submenu: [
-            { title: 'Home One', url: '/' },
-            { title: 'Home Two', url: '/demo/home-two' },
-            {
-                title: 'Header Spaceship',
-                url: '/demo/header-spaceship-variant-one',
-                submenu: [
-                    { title: 'Variant One', url: '/demo/header-spaceship-variant-one' },
-                    { title: 'Variant Two', url: '/demo/header-spaceship-variant-two' },
-                    { title: 'Variant Three', url: '/demo/header-spaceship-variant-three' },
-                ],
-            },
-            {
-                title: 'Header Classic',
-                url: '/demo/header-classic-variant-one',
-                submenu: [
-                    { title: 'Variant One', url: '/demo/header-classic-variant-one' },
-                    { title: 'Variant Two', url: '/demo/header-classic-variant-two' },
-                    { title: 'Variant Three', url: '/demo/header-classic-variant-three' },
-                    { title: 'Variant Four', url: '/demo/header-classic-variant-four' },
-                    { title: 'Variant Five', url: '/demo/header-classic-variant-five' },
-                ],
-            },
-            {
-                title: 'Mobile Header',
-                url: '/demo/mobile-header-variant-one',
-                submenu: [
-                    { title: 'Variant One', url: '/demo/mobile-header-variant-one' },
-                    { title: 'Variant Two', url: '/demo/mobile-header-variant-two' },
-                ],
-            },
-        ],
-    },
-    {
-        title: 'Shop',
+        title: 'หมวดหมู่สินค้า',
         url: '/demo/shop/shop-grid-4-sidebar',
         submenu: [
             {
-                title: 'Category',
+                title: 'ไส้กรอง',
                 url: '/demo/shop/category-columns-4-sidebar',
                 submenu: [
-                    { title: '3 Columns Sidebar', url: '/demo/shop/category-columns-3-sidebar' },
+                    {
+                        title: 'กรองน้ำมันเครื่อง',
+                        url: '/demo/shop/shop-grid-4-sidebar',
+                        submenu: [
+                            { title: 'รถญี่ปุ่น', url: '/catalog/products' },
+                            { title: 'รถยุโรป', url: '/catalog/products' },
+                            { title: 'รถมอเตอร์ไซค์', url: '/catalog/products' },
+                        ],
+                    },
                     { title: '4 Columns Sidebar', url: '/demo/shop/category-columns-4-sidebar' },
                     { title: '5 Columns Sidebar', url: '/demo/shop/category-columns-5-sidebar' },
                     { title: '4 Columns Full', url: '/demo/shop/category-columns-4-full' },

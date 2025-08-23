@@ -2,47 +2,9 @@
 import { IMainMenuLink } from '~/interfaces/main-menu-link';
 
 const dataHeaderMainMenu: IMainMenuLink[] = [
+    /*{ title: 'หน้าแรก', url: '/' },
     {
-        title: 'Home',
-        url: '/',
-        submenu: {
-            type: 'menu',
-            links: [
-                { title: 'Home One', url: '/' },
-                { title: 'Home Two', url: '/demo/home-two' },
-                {
-                    title: 'Header Spaceship',
-                    url: '/demo/header-spaceship-variant-one',
-                    links: [
-                        { title: 'Variant One', url: '/demo/header-spaceship-variant-one' },
-                        { title: 'Variant Two', url: '/demo/header-spaceship-variant-two' },
-                        { title: 'Variant Three', url: '/demo/header-spaceship-variant-three' },
-                    ],
-                },
-                {
-                    title: 'Header Classic',
-                    url: '/demo/header-classic-variant-one',
-                    links: [
-                        { title: 'Variant One', url: '/demo/header-classic-variant-one' },
-                        { title: 'Variant Two', url: '/demo/header-classic-variant-two' },
-                        { title: 'Variant Three', url: '/demo/header-classic-variant-three' },
-                        { title: 'Variant Four', url: '/demo/header-classic-variant-four' },
-                        { title: 'Variant Five', url: '/demo/header-classic-variant-five' },
-                    ],
-                },
-                {
-                    title: 'Mobile Header',
-                    url: '/demo/mobile-header-variant-one',
-                    links: [
-                        { title: 'Variant One', url: '/demo/mobile-header-variant-one' },
-                        { title: 'Variant Two', url: '/demo/mobile-header-variant-two' },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        title: 'Megamenu',
+        title: 'หมวดหมู่สินค้า',
         url: '/catalog/products',
         submenu: {
             type: 'megamenu',
@@ -52,25 +14,20 @@ const dataHeaderMainMenu: IMainMenuLink[] = [
                     size: 6,
                     links: [
                         {
-                            title: 'Headlights & Lighting',
+                            title: 'กรองน้ำมันเครื่อง',
                             url: '/catalog/products',
                             links: [
-                                { title: 'Headlights', url: '/catalog/products' },
-                                { title: 'Tail Lights', url: '/catalog/products' },
-                                { title: 'Fog Lights', url: '/catalog/products' },
-                                { title: 'Turn Signals', url: '/catalog/products' },
-                                { title: 'Switches & Relays', url: '/catalog/products' },
-                                { title: 'Corner Lights', url: '/catalog/products' },
+                                { title: 'รถญี่ปุ่น', url: '/catalog/products' },
+                                { title: 'รถยุโรป', url: '/catalog/products' },
+                                { title: 'รถมอเตอร์ไซค์', url: '/catalog/products' },
                             ],
                         },
                         {
-                            title: 'Brakes & Suspension',
+                            title: 'กรองอากาศ',
                             url: '/catalog/products',
                             links: [
-                                { title: 'Brake Discs', url: '/catalog/products' },
-                                { title: 'Wheel Hubs', url: '/catalog/products' },
-                                { title: 'Air Suspension', url: '/catalog/products' },
-                                { title: 'Ball Joints', url: '/catalog/products' },
+                                { title: 'รถญี่ปุ่น', url: '/catalog/products' },
+                                { title: 'รถยุโรป', url: '/catalog/products' },
                             ],
                         },
                     ],
@@ -108,109 +65,8 @@ const dataHeaderMainMenu: IMainMenuLink[] = [
             ignoreIn: ['spaceship'],
         },
     },
-    {
-        title: 'Shop',
-        url: '/demo/shop/shop-grid-4-sidebar',
-        submenu: {
-            type: 'menu',
-            links: [
-                {
-                    title: 'Category',
-                    url: '/demo/shop/category-columns-4-sidebar',
-                    links: [
-                        { title: '3 Columns Sidebar', url: '/demo/shop/category-columns-3-sidebar' },
-                        { title: '4 Columns Sidebar', url: '/demo/shop/category-columns-4-sidebar' },
-                        { title: '5 Columns Sidebar', url: '/demo/shop/category-columns-5-sidebar' },
-                        { title: '4 Columns Full', url: '/demo/shop/category-columns-4-full' },
-                        { title: '5 Columns Full', url: '/demo/shop/category-columns-5-full' },
-                        { title: '6 Columns Full', url: '/demo/shop/category-columns-6-full' },
-                        { title: '7 Columns Full', url: '/demo/shop/category-columns-7-full' },
-                        { title: 'Right Sidebar', url: '/demo/shop/category-right-sidebar' },
-                    ],
-                },
-                {
-                    title: 'Shop Grid',
-                    url: '/demo/shop/shop-grid-4-sidebar',
-                    links: [
-                        { title: '6 Columns Full', url: '/demo/shop/shop-grid-6-full' },
-                        { title: '5 Columns Full', url: '/demo/shop/shop-grid-5-full' },
-                        { title: '4 Columns Full', url: '/demo/shop/shop-grid-4-full' },
-                        { title: '4 Columns Sidebar', url: '/demo/shop/shop-grid-4-sidebar' },
-                        { title: '3 Columns Sidebar', url: '/demo/shop/shop-grid-3-sidebar' },
-                    ],
-                },
-                { title: 'Shop List', url: '/demo/shop/shop-list' },
-                { title: 'Shop Table', url: '/demo/shop/shop-table' },
-                { title: 'Shop Right Sidebar', url: '/demo/shop/shop-right-sidebar' },
-                {
-                    title: 'Shop Navigation',
-                    url: '/demo/shop/shop-cursor-navigation',
-                    links: [
-                        { title: 'Cursor-Based', url: '/demo/shop/shop-cursor-navigation' },
-                        { title: 'Page-Based', url: '/demo/shop/shop-page-navigation' },
-                    ],
-                },
-                {
-                    title: 'Product',
-                    url: '/demo/shop/product-full',
-                    links: [
-                        { title: 'Full Width', url: '/demo/shop/product-full' },
-                        { title: 'Left Sidebar', url: '/demo/shop/product-sidebar' },
-                    ],
-                },
-                { title: 'Cart', url: '/cart' },
-                { title: 'Checkout', url: '/cart/checkout' },
-                { title: 'Order Success', url: '/demo/shop/order-success' },
-                { title: 'Wishlist', url: '/wishlist' },
-                { title: 'Compare', url: '/compare' },
-                { title: 'Track Order', url: '/track-order' },
-            ],
-        },
-    },
-    {
-        title: 'Blog',
-        url: '/demo/blog/classic-right-sidebar',
-        submenu: {
-            type: 'menu',
-            links: [
-                {
-                    title: 'Blog Classic',
-                    url: '/demo/blog/classic-right-sidebar',
-                    links: [
-                        { title: 'Left Sidebar', url: '/demo/blog/classic-left-sidebar' },
-                        { title: 'Right Sidebar', url: '/demo/blog/classic-right-sidebar' },
-                    ],
-                },
-                {
-                    title: 'Blog List',
-                    url: '/demo/blog/list-right-sidebar',
-                    links: [
-                        { title: 'Left Sidebar', url: '/demo/blog/list-left-sidebar' },
-                        { title: 'Right Sidebar', url: '/demo/blog/list-right-sidebar' },
-                    ],
-                },
-                {
-                    title: 'Blog Grid',
-                    url: '/demo/blog/grid-right-sidebar',
-                    links: [
-                        { title: 'Left Sidebar', url: '/demo/blog/grid-left-sidebar' },
-                        { title: 'Right Sidebar', url: '/demo/blog/grid-right-sidebar' },
-                    ],
-                },
-                {
-                    title: 'Post Page',
-                    url: '/demo/blog/post-full-width',
-                    links: [
-                        { title: 'Full Width', url: '/demo/blog/post-full-width' },
-                        { title: 'Left Sidebar', url: '/demo/blog/post-left-sidebar' },
-                        { title: 'Right Sidebar', url: '/demo/blog/post-right-sidebar' },
-                    ],
-                },
-                { title: 'Post Without Image', url: '/demo/blog/post-without-image' },
-            ],
-        },
-    },
-    {
+    { title: 'บทความ', url: '/' },
+    /*{
         title: 'Account',
         url: '/account/dashboard',
         submenu: {
@@ -256,7 +112,7 @@ const dataHeaderMainMenu: IMainMenuLink[] = [
                 { title: 'Typography', url: '/demo/site/typography' },
             ],
         },
-    },
+    },*/
 ];
 
 export default dataHeaderMainMenu;

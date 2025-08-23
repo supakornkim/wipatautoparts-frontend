@@ -71,8 +71,8 @@ function flatTree<T extends ICategory>(categories: T[]): T[] {
 
 const shopCategoriesDef: ICategoryDef[] = [
     {
-        name: 'Headlights & Lighting',
-        slug: 'headlights-lighting',
+        name: 'ไส้กรอง',
+        slug: 'ไส้กรอง',
         image: '/images/categories/category-1.jpg',
         items: 131,
         children: [
@@ -84,19 +84,6 @@ const shopCategoriesDef: ICategoryDef[] = [
             { name: 'Corner Lights', slug: 'corner-lights' },
             { name: 'Off-Road Lighting', slug: 'off-road-lighting' },
             { name: 'Lighting Accessories', slug: 'lighting-accessories' },
-        ],
-    },
-    {
-        name: 'Fuel System',
-        slug: 'fuel-system',
-        image: '/images/categories/category-2.jpg',
-        items: 356,
-        children: [
-            { name: 'Fuel Pumps', slug: 'fuel-pumps' },
-            { name: 'Motor Oil', slug: 'motor-oil' },
-            { name: 'Gas Caps', slug: 'gas-caps' },
-            { name: 'Fuel Injector', slug: 'fuel-injector' },
-            { name: 'Control Motor', slug: 'control-motor' },
         ],
     },
     {
