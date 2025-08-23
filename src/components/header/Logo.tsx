@@ -18,7 +18,11 @@ function Logo(props: Props) {
                 </div>
                 <div className="logo__image">
                     {/* logo */}
-                    <AppImage src="/images/Logo-wipat.png" alt="วิพัฒน์ อะไหล่ยนต์" />
+                    <AppImage 
+                        src="/images/Logo-wipat.png" 
+                        alt="วิพัฒน์ อะไหล่ยนต์" 
+                        style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
+                    />
                     {/* logo / end */}
                 </div>
             </AppLink>

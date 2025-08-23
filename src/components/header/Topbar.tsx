@@ -87,7 +87,7 @@ function Topbar(props: Props) {
                         </AppLink>
                     </div>
 
-                    <DropdownCurrency />
+                    {/* <DropdownCurrency /> */}
 
                     <DropdownLanguage />
                 </React.Fragment>

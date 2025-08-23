@@ -2,7 +2,7 @@
 const nextConfig = {
   env: { basePath: process.env.BASE_PATH || '' },
   basePath: process.env.BASE_PATH || '',
-  i18n: { locales: ['en', 'ru', 'ar', 'th'], defaultLocale: 'th' },
+  i18n: { locales: ['th', 'en', 'ru', 'ar'], defaultLocale: 'th', localeDetection: false, },
 
   webpack(config) {
     // ตัด .svg ออกจาก file-loader เดิมของ Next

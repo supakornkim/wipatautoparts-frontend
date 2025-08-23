@@ -3,16 +3,16 @@ import { ILanguage } from '~/interfaces/language';
 
 const dataShopLanguages: ILanguage[] = [
     {
-        locale: 'en',
-        code: 'en',
-        name: 'English',
+        locale: 'th',
+        code: 'th',
+        name: 'Thai',
         icon: '/images/languages/language-1.png',
         direction: 'ltr',
     },
     {
-        locale: 'th',
-        code: 'th',
-        name: 'Thai',
+        locale: 'en',
+        code: 'en',
+        name: 'English',
         icon: '/images/languages/language-1.png',
         direction: 'ltr',
     },
