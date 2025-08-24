@@ -20,54 +20,123 @@ const dataMobileMenuLinks: IMobileMenuLink[] = [
                             { title: 'รถมอเตอร์ไซค์', url: '/catalog/products' },
                         ],
                     },
-                    { title: '4 Columns Sidebar', url: '/demo/shop/category-columns-4-sidebar' },
-                    { title: '5 Columns Sidebar', url: '/demo/shop/category-columns-5-sidebar' },
-                    { title: '4 Columns Full', url: '/demo/shop/category-columns-4-full' },
-                    { title: '5 Columns Full', url: '/demo/shop/category-columns-5-full' },
-                    { title: '6 Columns Full', url: '/demo/shop/category-columns-6-full' },
-                    { title: '7 Columns Full', url: '/demo/shop/category-columns-7-full' },
-                    { title: 'Right Sidebar', url: '/demo/shop/category-right-sidebar' },
+                    {
+                        title: 'กรองอากาศ',
+                        url: '/demo/shop/shop-grid-4-sidebar',
+                        submenu: [
+                            { title: 'รถญี่ปุ่น', url: '/catalog/products' },
+                            { title: 'รถยุโรป', url: '/catalog/products' },
+                        ],
+                    },
+                    {
+                        title: 'กรองแอร์',
+                        url: '/demo/shop/shop-grid-4-sidebar',
+                        submenu: [
+                            { title: 'รถญี่ปุ่น', url: '/catalog/products' },
+                            { title: 'รถยุโรป', url: '/catalog/products' },
+                            { title: 'รถมอเตอร์ไซค์', url: '/catalog/products' },
+                        ],
+                    },
+                    {
+                        title: 'กรองน้ำมันเชื้อเพลิง',
+                        url: '/demo/shop/shop-grid-4-sidebar',
+                        submenu: [
+                            { title: 'กรองเบนซิน', url: '/catalog/products' },
+                            { title: 'กรองดีเซล (โซล่า)', url: '/catalog/products' },
+                        ],
+                    },
+                    {
+                        title: 'กรองน้ำมันเกียร์',
+                        url: '/demo/shop/shop-grid-4-sidebar',
+                        submenu: [
+                            { title: 'รถญี่ปุ่น', url: '/catalog/products' },
+                            { title: 'รถยุโรป', url: '/catalog/products' },
+                        ],
+                    },
                 ],
             },
             {
-                title: 'Shop Grid',
+                title: 'ช่วงล่างและลูกปืน',
                 url: '/demo/shop/shop-grid-4-sidebar',
                 submenu: [
-                    { title: '6 Columns Full', url: '/demo/shop/shop-grid-6-full' },
-                    { title: '5 Columns Full', url: '/demo/shop/shop-grid-5-full' },
-                    { title: '4 Columns Full', url: '/demo/shop/shop-grid-4-full' },
-                    { title: '4 Columns Sidebar', url: '/demo/shop/shop-grid-4-sidebar' },
-                    { title: '3 Columns Sidebar', url: '/demo/shop/shop-grid-3-sidebar' },
+                    {
+                        title: 'โช้คอัพ',
+                        url: '/catalog/products',
+                        submenu: [
+                            { title: 'โช้คอัพหน้า', url: '/catalog/products' },
+                            { title: 'โช้คอัพหลัง', url: '/catalog/products' },
+                        ],
+                    },
+                    {
+                        title: 'สปริงโช้ค',
+                        url: '/catalog/products',
+                        submenu: [
+                            { title: 'สปริงโช้คหน้า', url: '/catalog/products' },
+                            { title: 'สปริงโช้คหลัง', url: '/catalog/products' },
+                        ],
+                    },
+                    { title: 'แร็คพวงมาลัย', url: '/catalog/products' },
+                    { title: 'เพลาขับ', url: '/catalog/products' },
+                    { title: 'แหนบรถยนต์', url: '/catalog/products' },
+                    { title: 'โตงแตง สาแหรก สะดือแหนบ', url: '/catalog/products' },
+                    { title: 'ลูกปืน', url: '/catalog/products' },
+                    {
+                        title: 'ลูกหมาก',
+                        url: '/catalog/products',
+                        submenu: [
+                            { title: 'ลูกหมากกันโคลงหน้า', url: '/catalog/products' },
+                            { title: 'ลูกหมากกันโคลงหลัง', url: '/catalog/products' },
+                            { title: 'ลูกหมากปีกนกล่าง', url: '/catalog/products' },
+                            { title: 'ลูกหมากปีกนกบน', url: '/catalog/products' },
+                            { title: 'ลูกหมากแร็ค​(ไม้ตีกลอง)', url: '/catalog/products' },
+                            { title: 'ลูกหมากปีกคันชัก', url: '/catalog/products' },
+                            { title: 'กล้องยา', url: '/catalog/products' },
+                            { title: 'คันส่งต่างๆ', url: '/catalog/products' },
+                        ],
+                    },
+                    {
+                        title: 'ปีกนก',
+                        url: '/catalog/products',
+                        submenu: [
+                            { title: 'ปีกนกบน', url: '/catalog/products' },
+                            { title: 'ปีกนกล่าง', url: '/catalog/products' },
+                            { title: 'สลักปีกนก', url: '/catalog/products' },
+                        ],
+                    },
+                    {
+                        title: 'บุชและยางต่างๆ',
+                        url: '/catalog/products',
+                        submenu: [
+                            { title: 'บุชปีกนก', url: '/catalog/products' },
+                            { title: 'บุชหูแหนบ', url: '/catalog/products' },
+                            { title: 'บุชหูโช้ค', url: '/catalog/products' },
+                            { title: 'ยางกันโคลง', url: '/catalog/products' },
+                            { title: 'สกรูกันโคลง', url: '/catalog/products' },
+                            { title: 'ยางกันกระแทกโช้คอัพ', url: '/catalog/products' },
+                            { title: 'ยางกันฝุ่นโช้คอัพ', url: '/catalog/products' },
+                            { title: 'ยางรองสปริง', url: '/catalog/products' },
+                            { title: 'เบ้าโช้ค ลูกปืนเบ้าโช้ค', url: '/catalog/products' },
+                            { title: 'ยางกันฝุ่นแร็ค', url: '/catalog/products' },
+                            { title: 'ยางหุ้มเพลาขับ', url: '/catalog/products' },
+                            { title: 'ยางหิ้วเพลากลาง', url: '/catalog/products' },
+                        ],
+                    },
                 ],
             },
-            { title: 'Shop List', url: '/demo/shop/shop-list' },
-            { title: 'Shop Table', url: '/demo/shop/shop-table' },
-            { title: 'Shop Right Sidebar', url: '/demo/shop/shop-right-sidebar' },
-            {
-                title: 'Shop Navigation',
-                url: '/demo/shop/shop-cursor-navigation',
-                submenu: [
-                    { title: 'Cursor-Based', url: '/demo/shop/shop-cursor-navigation' },
-                    { title: 'Page-Based', url: '/demo/shop/shop-page-navigation' },
-                ],
-            },
-            {
-                title: 'Product',
-                url: '/demo/shop/product-full',
-                submenu: [
-                    { title: 'Full Width', url: '/demo/shop/product-full' },
-                    { title: 'Left Sidebar', url: '/demo/shop/product-sidebar' },
-                ],
-            },
-            { title: 'Cart', url: '/cart' },
-            { title: 'Checkout', url: '/cart/checkout' },
-            { title: 'Order Success', url: '/demo/shop/order-success' },
-            { title: 'Wishlist', url: '/wishlist' },
-            { title: 'Compare', url: '/compare' },
-            { title: 'Track Order', url: '/track-order' },
+            { title: 'ระบบเบรก', url: '/catalog/products' },
+            { title: 'ห้องเครื่องยนต์ เกียร์และคลัทช์', url: '/catalog/products' },
+            { title: 'ของเหลว และสารหล่อลื่น', url: '/catalog/products' },
+            { title: 'อุปกรณ์ส่องสว่าง', url: '/catalog/products' },
+            { title: 'ใบปัดน้ำฝน', url: '/catalog/products' },
+            { title: 'ผลิตภัณฑ์ดูแลรถยนต์', url: '/catalog/products' },
+            { title: 'อุปกรณ์ติดรถอื่นๆและของแต่ง', url: '/catalog/products' },
         ],
     },
-    {
+    { title: 'เกี่ยวกับเรา', url: '/about-us' },
+    { title: 'ติดต่อเรา', url: '/contact-us' },
+    { title: 'ติดตามคำสั่งซื้อ', url: '/track-order' },
+    { title: 'บทความ', url: '/compare' },
+    /*{
         title: 'Blog',
         url: '/demo/blog/classic-right-sidebar',
         submenu: [
@@ -106,8 +175,9 @@ const dataMobileMenuLinks: IMobileMenuLink[] = [
             },
             { title: 'Post Without Image', url: '/demo/blog/post-without-image' },
         ],
-    },
-    {
+    },*/
+    
+    /*{
         title: 'Account',
         url: '/account/dashboard',
         submenu: [
@@ -147,7 +217,7 @@ const dataMobileMenuLinks: IMobileMenuLink[] = [
             { title: 'Components', url: '/demo/site/components' },
             { title: 'Typography', url: '/demo/site/typography' },
         ],
-    },
+    },*/
 ];
 
 export default dataMobileMenuLinks;

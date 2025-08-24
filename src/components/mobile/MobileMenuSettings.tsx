@@ -82,7 +82,7 @@ function MobileMenuSettings() {
                     )}
                 </MobileMenuPanelController>
             </div>
-            <div className="mobile-menu__setting">
+            {/*<div className="mobile-menu__setting">
                 <MobileMenuPanelController
                     label="Currency"
                     content={<MobileMenuLinks items={currencies} onItemClick={onCurrencyItemClick} />}
@@ -106,7 +106,7 @@ function MobileMenuSettings() {
                         </button>
                     )}
                 </MobileMenuPanelController>
-            </div>
+            </div>*/}
         </div>
     );
 }

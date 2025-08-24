@@ -15,15 +15,15 @@ const dataShopCurrencies: ICurrency[] = [
         rate: 0.78,
     },*/
     {
-        code: 'USD',
-        symbol: '$',
-        name: 'US Dollar',
-        rate: 1,
-    },
-    {
         code: 'THB',
         symbol: '฿',
         name: 'BAHT',
+        rate: 1,
+    },
+    {
+        code: 'USD',
+        symbol: '$',
+        name: 'US Dollar',
         rate: 1,
     },
     /*{
