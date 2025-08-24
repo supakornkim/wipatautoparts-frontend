@@ -97,7 +97,7 @@ export interface IProduct {
     type: IProductType;
     categories?: IShopCategory[];
     attributes: IProductAttribute[];
-    options: IProductOption[];
+    options?: IProductOption[];
     customFields?: ICustomFields;
 }
 
