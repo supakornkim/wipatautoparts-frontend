@@ -49,7 +49,7 @@ function ProductTabs(props: Props) {
             content: (
                 <div
                     className="typography"
-                    dangerouslySetInnerHTML={{ __html: product.description }}
+                    dangerouslySetInnerHTML={{ __html: product.description ? product.description: '' }}
                 />
             ),
         },
