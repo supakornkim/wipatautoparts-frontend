@@ -363,5 +363,7 @@
   "TEXT_VEHICLE_ENGINE": "เครื่องยนต์ {engine}",
   "TEXT_VEHICLE_FILTER_HELP": "เลือกรถเพื่อกรองเฉพาะอะไหล่ที่ตรงรุ่น",
   "TEXT_WORKING_HOURS": "เวลาทำการ",
-  "TEXT_YOUR_SHOPPING_CART_IS_EMPTY": "รถเข็นของคุณว่างเปล่า!"
+  "TEXT_YOUR_SHOPPING_CART_IS_EMPTY": "รถเข็นของคุณว่างเปล่า!",
+
+  "Line": "Line"
 }

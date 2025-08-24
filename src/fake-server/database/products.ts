@@ -99,39 +99,11 @@ function makeProducts(defs: IProductDef[]): IProduct[] {
         return {
             id: getNextId(),
             name: def.name,
-            excerpt: `
-                Many philosophical debates that began in ancient times are still debated today. In one general sense,
-                philosophy is associated with wisdom, intellectual culture and a search for knowledge.
-            `,
-            description: `
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fermentum, diam non iaculis finibus,
-                    ipsum arcu sollicitudin dolor, ut cursus sapien sem sed purus. Donec vitae fringilla tortor, sed
-                    fermentum nunc. Suspendisse sodales turpis dolor, at rutrum dolor tristique id. Quisque pellentesque
-                    ullamcorper felis, eget gravida mi elementum a. Maecenas consectetur volutpat ante, sit amet molestie
-                    urna luctus in. Nulla eget dolor semper urna malesuada dictum. Duis eleifend pellentesque dui et
-                    finibus. Pellentesque dapibus dignissim augue. Etiam odio est, sodales ac aliquam id, iaculis eget
-                    lacus. Aenean porta, ante vitae suscipit pulvinar, purus dui interdum tellus, sed dapibus mi mauris
-                    vitae tellus.
-                </p>
-                <h4>Etiam lacus lacus mollis in mattis</h4>
-                <p>
-                    Praesent mattis eget augue ac elementum. Maecenas vel ante ut enim mollis accumsan. Vestibulum vel
-                    eros at mi suscipit feugiat. Sed tortor purus, vulputate et eros a, rhoncus laoreet orci. Proin sapien
-                    neque, commodo at porta in, vehicula eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et
-                    ultrices posuere cubilia Curae; Curabitur porta vulputate augue, at sollicitudin nisl molestie eget.
-                </p>
-                <p>
-                    Nunc sollicitudin, nunc id accumsan semper, libero nunc aliquet nulla, nec pretium ipsum risus ac
-                    neque. Morbi eu facilisis purus. Quisque mi tortor, cursus in nulla ut, laoreet commodo quam.
-                    Pellentesque et ornare sapien. In ac est tempus urna tincidunt finibus. Integer erat ipsum, tristique
-                    ac lobortis sit amet, dapibus sit amet purus. Nam sed lorem nisi. Vestibulum ultrices tincidunt turpis,
-                    sit amet fringilla odio scelerisque non.
-                </p>
-            `,
+            excerpt: def.excerpt,
+            description: def.description,
             slug: def.slug,
             sku: def.sku,
-            partNumber: 'BDX-750Z370-S',
+            partNumber: '',
             stock: 'in-stock',
             price: def.price,
             compareAtPrice: def.compareAtPrice || null,
@@ -199,7 +171,7 @@ function makeProducts(defs: IProductDef[]): IProduct[] {
                     ],
                 },
             ],
-            tags: ['Brake Kit', 'Brandix', 'Filter', 'Bumper', 'Transmission', 'Hood'],
+            tags: ['Wix'],
             categories,
             customFields: {},
         };
@@ -208,7 +180,46 @@ function makeProducts(defs: IProductDef[]): IProduct[] {
 
 const productsDef: IProductDef[] = [
     {
-        name: 'Brandix Spark Plug Kit ASR-400',
+        name: 'Wix วิกซ์ กรองน้ำมันเครื่อง Big bike บิ๊กไบท์ Nissan March มาร์ช Almera อัลเมร่า Mazda 2และ3 เบนซิน',
+        slug: 'wix-กรองน้ำมันเครื่อง-big-bike-nissan-march-almera-mazda-2-3-benzin-wl10466a',
+        sku: 'WL10466A',
+        price: 110,
+        excerpt: '',
+        description: `<p>กรองน้ำมันเครื่องคุณภาพ WIX วิกซ์</p>
+            <p>WIX ผู้ผลิตไส้กรองรถยนต์ คุณภาพชั้นนำของโลก ด้วยประสบการณ์กว่า 80 ปี จึงการันตีได้ถึงความไว้วางใจของลูกค้าทั่วโลก</p>
+            <p>ด้วยคุณภาพของวัสดุ และโครงสร้างภายในที่ได้มาตรฐาน</p>
+            <p>**ใช้บล็อคเบอร์ 901 หรือ ขนาด 65 มม. ในการถอด**</p>
+            <p>สำหรับรถ</p>
+            <p>- Nissan March มาร์ช, Almera อัลเมร่า, Tiida, Sunny neo, X-Trail, Juke, Sylphy</p>
+            <p>- Mazda 3 1.6 ปี 04-13 , Mazda 3 Skyactive 1.6-1.8 เบนซินเท่านั้น ปี 14-19</p>
+            <p>- Mazda 2 , Mazda 2 Skyactiv เบนซินเท่านั้น</p>
+            <p>- CX3, CX5 เบนซิน</p>
+            <p>- Mazda 323 1.6-1.8 ปี 90-98</p>
+            <p>- Subaru XV 1.6-2.0, Forester 2.0</p>
+            <p>และมอเตอร์ไซค์หลายรุ่นเช่น</p>
+            <p>- HONDA รุ่น FORZA 300/350, CBR500R , CB500F , CB500X , REBEL 500 , CBR650F , CB650F , CBR650R , CB650R , X-ADV , NC750X , CBR1000 , CB400 Super Four</p>
+            <p>- YAMAHA รุ่น R1, R3 , MT-03 , MT-07 , MT-09 , R6 , Tmax</p>
+            <p>- KAWASAKI รุ่น NINJA 250-400 , Z250-1000 , NINJA 650 , Z650 , ER6N , VERSYS 300 , VERSYS 650</p>
+            <p>- BENELLI รุ่น TRK 502 , TNT300 , TNT600</p>
+            <p>- TRIUMPH รุ่น BONNEVILLE T100 , T120 , DAYTONA , STREET TRIPLE , STREET TWIN</p>
+            <p>เบอร์สินค้า WL10466A</p>
+            <p>#กรองน้ำมันเครื่อง #กรองน้ำมันเครื่องWIX #กรองน้ำมันเครื่องวิกซ์ #WIX #กรองน้ำมันเครื่องWIXMarch #กรองน้ำมันเครื่องWIXAlmera #กรองน้ำมันเครื่องMarch #กรองน้ำมันเครื่องAlmera #กรองน้ำมันเครื่องTiida #March #Almera #กรองน้ำมันเครื่องMazda3 #กรองน้ำมันเครื่องMazda31.6 #วิกซ์</p>`,
+        images: [
+            '/images/products/WL10466A/wl-1.webp',
+            '/images/products/WL10466A/wl-2.mp4',
+            '/images/products/WL10466A/wl-3.webp',
+        ],
+        badges: ['hot'],
+        rating: 4,
+        reviews: 3,
+        availability: 'in-stock',
+        compatibility: [],
+        attributes: {
+            Color: 'White',
+        },
+    },
+    {
+        name: 'brandix-spark-plug-kit-asr-400',
         slug: 'brandix-spark-plug-kit-asr-400',
         sku: '140-10440-B',
         price: 19,

@@ -7,6 +7,8 @@ export interface IProductDef {
     slug: string;
     sku: string;
     price: number;
+    excerpt?: string;
+    description?: string;
     compareAtPrice?: number;
     images: string[];
     badges?: string|string[];
