@@ -1,3 +1,5 @@
+import { IProductOption } from "~/interfaces/product";
+
 export interface IProductAttributesDef {
     [slug: string]: string | string[] | [true, string, ...string[]];
 }
@@ -9,6 +11,7 @@ export interface IProductDef {
     price: number;
     excerpt?: string;
     description?: string;
+    options?: IProductOption[];
     compareAtPrice?: number;
     images: string[];
     badges?: string|string[];

@@ -148,29 +148,7 @@ function makeProducts(defs: IProductDef[]): IProduct[] {
                     ...def.attributes,
                 },
             ),
-            options: [
-                {
-                    type: 'default',
-                    slug: 'material',
-                    name: 'Material',
-                    values: [
-                        { slug: 'steel', name: 'Steel' },
-                        { slug: 'aluminium', name: 'Aluminium' },
-                        { slug: 'thorium', name: 'Thorium' },
-                    ],
-                },
-                {
-                    type: 'color',
-                    slug: 'color',
-                    name: 'Color',
-                    values: [
-                        { slug: 'white', name: 'White', color: '#fff' },
-                        { slug: 'yellow', name: 'Yellow', color: '#ffd333' },
-                        { slug: 'red', name: 'Red', color: '#ff4040' },
-                        { slug: 'blue', name: 'Blue', color: '#4080ff' },
-                    ],
-                },
-            ],
+            options: def.options,
             tags: ['Wix'],
             categories,
             customFields: {},
@@ -235,6 +213,29 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'White',
         },
+        options: [
+            {
+                type: 'default',
+                slug: 'material',
+                name: 'Material',
+                values: [
+                    { slug: 'steel', name: 'Steel' },
+                    { slug: 'aluminium', name: 'Aluminium' },
+                    { slug: 'thorium', name: 'Thorium' },
+                ],
+            },
+            {
+                type: 'color',
+                slug: 'color',
+                name: 'Color',
+                values: [
+                    { slug: 'white', name: 'White', color: '#fff' },
+                    { slug: 'yellow', name: 'Yellow', color: '#ffd333' },
+                    { slug: 'red', name: 'Red', color: '#ff4040' },
+                    { slug: 'blue', name: 'Blue', color: '#4080ff' },
+                ],
+            },
+        ],
     },
     {
         name: 'Brandix Brake Kit BDX-750Z370-S',
@@ -252,6 +253,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Silver',
         },
+        options: [],
     },
     {
         name: 'Left Headlight Of Brandix Z54',
@@ -270,6 +272,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Red',
         },
+        options: [],
     },
     {
         name: 'Glossy Gray 19\' Aluminium Wheel AR-19',
@@ -288,6 +291,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Black',
         },
+        options: [],
     },
     {
         name: 'Twin Exhaust Pipe From Brandix Z54',
@@ -305,6 +309,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Light Gray',
         },
+        options: [],
     },
     {
         name: 'Motor Oil Level 5',
@@ -322,6 +327,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Gray',
         },
+        options: [],
     },
     {
         name: 'Brandix Engine Block Z4',
@@ -340,6 +346,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Dark Gray',
         },
+        options: [],
     },
     {
         name: 'Brandix Clutch Discs Z175',
@@ -357,6 +364,7 @@ const productsDef: IProductDef[] = [
         attributes: {
             Color: 'Coal',
         },
+        options: [],
     },
     {
         name: 'Brandix Manual Five Speed Gearbox',

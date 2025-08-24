@@ -408,7 +408,7 @@ function ShopPageProduct(props: Props) {
                                             <form onSubmit={productForm.submit} className="product__info-card">
                                                 {productInfoBody}
 
-                                                {product.options.length > 0 && (
+                                                {product.options && product.options.length > 0 && (
                                                     <ProductForm
                                                         options={product.options}
                                                         className="product__form"

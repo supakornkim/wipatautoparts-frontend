@@ -47,7 +47,7 @@ export function useProductForm(product: IProduct | null) {
 
         const options: ICartItemOption[] = [];
 
-        Object.keys(data.options).forEach((optionSlug) => {
+        Object.keys(data.options || {}).forEach((optionSlug) => {
             const option = product.options.find((x) => x.slug === optionSlug);
 
             if (!option) {

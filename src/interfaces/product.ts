@@ -73,8 +73,8 @@ export interface IProduct {
     /**
      * A short product description without HTML tags.
      */
-    excerpt: string;
-    description: string;
+    excerpt?: string;
+    description?: string;
     slug: string;
     sku?: string;
     partNumber: string;
