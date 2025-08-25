@@ -1,76 +1,72 @@
 // src/services/forms/sign-up.ts
-// react
 import { useMemo, useState } from 'react';
-// third-party
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-// application
 import { useAsyncAction } from '~/store/hooks';
 import { useUserSignUp } from '~/store/user/userHooks';
+import axios from 'axios';
+import { supabase } from '~/lib/supabaseClient'; // ตรวจว่ามีและชี้โปรเจกต์ถูก
 
-interface ISignUpFormOptions {
-    onSuccess?: () => void;
-}
-
+interface ISignUpFormOptions { onSuccess?: () => void; }
 export interface ISignUpForm {
-    email: string;
-    password: string;
-    confirmPassword: string;
-    // ถ้าอนาคตมีฟิลด์เพิ่ม (เช่น name, phone) ใส่ตรงนี้ได้เลย
-    // name?: string;
-    // phone?: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  // name?: string;
+  // phone?: string;
 }
 
 export function useSignUpForm(options: ISignUpFormOptions = {}) {
-    const signUp = useUserSignUp();
-    const { onSuccess } = options;
-    const [serverError, setServerError] = useState<string | null>(null);
+  const signUpLegacy = useUserSignUp(); // ตัวเดิมของธีม ถ้ายังใช้
+  const { onSuccess } = options;
+  const [serverError, setServerError] = useState<string | null>(null);
 
-    const methods = useForm<ISignUpForm>({
-        defaultValues: {
-            email: 'user@example.com',
-            password: '123456',
-            confirmPassword: '123456',
-        },
-    });
+  const methods = useForm<ISignUpForm>({
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
-    const { handleSubmit } = methods;
+  const { handleSubmit } = methods;
 
-    const [submit, submitInProgress] = useAsyncAction(async (data: ISignUpForm) => {
-        setServerError(null);
+  const [submit, submitInProgress] = useAsyncAction(async (data: ISignUpForm) => {
+    setServerError(null);
 
-        try {
-            // สมัครสมาชิกในเว็บ (ระบบเดิมของคุณ)
-            await signUp(data.email, data.password);
+    try {
+      // 1) สมัครกับ Supabase Auth โดยตรง
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        // options: { data: { full_name: data.name } } // ถ้ามีฟิลด์เพิ่ม
+      });
 
-            // ยิงไปสร้าง partner ใน Odoo — ไม่บล็อก UX ถ้าล้มเหลว
-            // ชื่อ (name) จะ derive จากอีเมลก่อน @ หากคุณยังไม่มีฟิลด์ name ในฟอร์ม
-            const derivedName = (data.email || '').split('@')[0] || 'customer';
+      if (signUpError) {
+        console.error('Supabase signUp error:', signUpError);
+        // แสดงข้อความจาก supabase ตรง ๆ จะช่วยดีบัก
+        throw new Error(signUpError.message || 'SIGN_UP_FAILED');
+      }
 
-            // fire-and-forget เพื่อไม่ให้หน้าค้าง (ไม่ต้องรอ)
-            axios.post('/api/odoo/create-partner', {
-                email: data.email,
-                name: derivedName,
-                // ถ้ามีฟิลด์ phone/name จริงในฟอร์มให้ส่งเพิ่มได้
-                // phone: data.phone,
-            }).catch((e) => {
-                // เก็บ log เงียบ ๆ ไม่ให้ผู้ใช้เจอ error หน้าฟอร์ม
-                // คุณจะเปลี่ยนเป็นส่งไป Sentry/Log service ก็ได้
-                console.warn('ODoo partner create failed:', e?.response?.data || e?.message);
-            });
+      // 2) (ถ้ายังอยากสมัครระบบเดิมของธีม) – หรือจะถอดออกก็ได้
+      await signUpLegacy(data.email, data.password);
 
-            if (onSuccess) onSuccess();
-        } catch (error: any) {
-            setServerError(`ERROR_API_${error?.message || 'UNKNOWN'}`);
-        }
-    }, [signUp, onSuccess]);
+      // 3) ยิงไปสร้าง partner ที่ Odoo แบบไม่บล็อก UX
+      const derivedName = (data.email || '').split('@')[0] || 'customer';
+      axios.post('/api/odoo/create-partner', { email: data.email, name: derivedName })
+        .catch((e) => console.warn('Odoo partner create failed:', e?.response?.data || e?.message));
 
-    return {
-        submit: useMemo(() => handleSubmit(submit), [handleSubmit, submit]),
-        submitInProgress: submitInProgress || methods.formState.isSubmitting,
-        serverError,
-        errors: methods.formState.errors,
-        register: methods.register,
-        watch: methods.watch,
-    };
+      onSuccess?.();
+    } catch (e: any) {
+      setServerError(e?.message || 'UNKNOWN_ERROR');
+    }
+  }, [onSuccess, signUpLegacy]);
+
+  return {
+    submit: useMemo(() => handleSubmit(submit), [handleSubmit, submit]),
+    submitInProgress: submitInProgress || methods.formState.isSubmitting,
+    serverError,
+    errors: methods.formState.errors,
+    register: methods.register,
+    watch: methods.watch,
+  };
 }
