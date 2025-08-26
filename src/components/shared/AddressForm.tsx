@@ -55,10 +55,13 @@ function AddressForm(props: Props) {
   const fieldId = idPrefix ? `${idPrefix}-` : '';
   const ns = useMemo(() => (namespace ? `${namespace}.` : ''), [namespace]);
 
-  // useDetachableForm → ได้ register ที่จะไม่ bind เมื่อ disabled = true
   const detachableRegister = useDetachableForm(formMethods, disabled || false);
 
-  // helper: คืนชื่อฟิลด์ (รองรับ namespace)
+  // 🛠 helper: รองรับทั้ง key ปกติและ path แบบมี namespace
+  const registerPath = (name: keyof IAddressForm | string, options?: any) =>
+    (detachableRegister as any)(name, options);
+
+  // ชื่อฟิลด์ (รองรับ namespace)
   const fieldName = (k: keyof IAddressForm) => `${ns}${k}`;
 
   // errors รองรับกรณีมี/ไม่มี namespace
@@ -90,7 +93,7 @@ function AddressForm(props: Props) {
             className={classNames('form-control', { 'is-invalid': !!errors?.firstName })}
             disabled={disabled}
             placeholder="Mark"
-            {...detachableRegister(fieldName('firstName'), { required: true })}
+            {...registerPath(fieldName('firstName'), { required: true })}
           />
           <div className="invalid-feedback">
             {errors?.firstName?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
@@ -107,7 +110,7 @@ function AddressForm(props: Props) {
             className={classNames('form-control', { 'is-invalid': !!errors?.lastName })}
             disabled={disabled}
             placeholder="Twain"
-            {...detachableRegister(fieldName('lastName'), { required: true })}
+            {...registerPath(fieldName('lastName'), { required: true })}
           />
           <div className="invalid-feedback">
             {errors?.lastName?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
@@ -126,7 +129,7 @@ function AddressForm(props: Props) {
           className="form-control"
           disabled={disabled}
           placeholder="Wipat Autoparts"
-          {...detachableRegister(fieldName('company'))}
+          {...registerPath(fieldName('company'))}
         />
       </div>
 
@@ -138,7 +141,7 @@ function AddressForm(props: Props) {
           id={`${fieldId}country`}
           className={classNames('form-control', { 'is-invalid': !!errors?.country })}
           disabled={disabled}
-          {...detachableRegister(fieldName('country'), { required: true })}
+          {...registerPath(fieldName('country'), { required: true })}
         >
           <option value=""><FormattedMessage id="INPUT_COUNTRY_PLACEHOLDER" /></option>
           {countries?.map((c) => (
@@ -162,7 +165,7 @@ function AddressForm(props: Props) {
           className={classNames('form-control', { 'is-invalid': !!errors?.address1 })}
           disabled={disabled}
           placeholder="House number and street name"
-          {...detachableRegister(fieldName('address1'), { required: true })}
+          {...registerPath(fieldName('address1'), { required: true })}
         />
         <div className="invalid-feedback">
           {errors?.address1?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
@@ -177,7 +180,7 @@ function AddressForm(props: Props) {
           className="form-control mt-2"
           disabled={disabled}
           placeholder="Apartment, suite, unit etc."
-          {...detachableRegister(fieldName('address2'))}
+          {...registerPath(fieldName('address2'))}
         />
       </div>
 
@@ -191,7 +194,7 @@ function AddressForm(props: Props) {
           className={classNames('form-control', { 'is-invalid': !!errors?.city })}
           disabled={disabled}
           placeholder="Houston"
-          {...detachableRegister(fieldName('city'), { required: true })}
+          {...registerPath(fieldName('city'), { required: true })}
         />
         <div className="invalid-feedback">
           {errors?.city?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
@@ -208,7 +211,7 @@ function AddressForm(props: Props) {
           className={classNames('form-control', { 'is-invalid': !!errors?.state })}
           disabled={disabled}
           placeholder="Texas"
-          {...detachableRegister(fieldName('state'), { required: true })}
+          {...registerPath(fieldName('state'), { required: true })}
         />
         <div className="invalid-feedback">
           {errors?.state?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
@@ -225,7 +228,7 @@ function AddressForm(props: Props) {
           className={classNames('form-control', { 'is-invalid': !!errors?.postcode })}
           disabled={disabled}
           placeholder="19720"
-          {...detachableRegister(fieldName('postcode'), { required: true })}
+          {...registerPath(fieldName('postcode'), { required: true })}
         />
         <div className="invalid-feedback">
           {errors?.postcode?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
@@ -243,7 +246,7 @@ function AddressForm(props: Props) {
             className={classNames('form-control', { 'is-invalid': !!errors?.email })}
             disabled={disabled}
             placeholder="user@example.com"
-            {...detachableRegister(fieldName('email'), {
+            {...registerPath(fieldName('email'), {
               required: true,
               validate: { email: validateEmail },
             })}
@@ -264,7 +267,7 @@ function AddressForm(props: Props) {
             className={classNames('form-control', { 'is-invalid': !!errors?.phone })}
             disabled={disabled}
             placeholder="+1 999 888 7777"
-            {...detachableRegister(fieldName('phone'), { required: true })}
+            {...registerPath(fieldName('phone'), { required: true })}
           />
           <div className="invalid-feedback">
             {errors?.phone?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
