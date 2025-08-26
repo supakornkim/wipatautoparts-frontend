@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 // third-party
 import classNames from 'classnames';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 // application
 import { countriesApi } from '~/api';
@@ -25,7 +25,7 @@ export interface IAddressForm {
 }
 
 interface Props {
-  namespace?: string; // ไม่ใช้ในกรณีนี้ แต่คงไว้ได้
+  namespace?: string;
   disabled?: boolean;
   idPrefix?: string;
 }
@@ -49,18 +49,23 @@ export function getAddressFormDefaultValue(initialData: IAddressForm | null = nu
 
 function AddressForm(props: Props) {
   const { namespace, disabled, idPrefix } = props;
-  const intl = useIntl();
-  // ★ ใส่ generic ของฟอร์มให้ชัด
   const formMethods = useFormContext<IAddressForm>();
-  const { register, getFieldState, formState } = formMethods;
+  const { formState } = formMethods;
 
   const fieldId = idPrefix ? `${idPrefix}-` : '';
   const ns = useMemo(() => (namespace ? `${namespace}.` : ''), [namespace]);
-  // ★ helper สร้าง path field (รองรับ namespace ในอนาคต)
-  const fieldName = <K extends keyof IAddressForm>(k: K) => `${ns}${k}` as const;
+
+  // useDetachableForm → ได้ register ที่จะไม่ bind เมื่อ disabled = true
+  const detachableRegister = useDetachableForm(formMethods, disabled || false);
+
+  // helper: คืนชื่อฟิลด์ (รองรับ namespace)
+  const fieldName = (k: keyof IAddressForm) => `${ns}${k}`;
+
+  // errors รองรับกรณีมี/ไม่มี namespace
+  const errorsAll = formState.errors as any;
+  const errors = namespace ? (errorsAll?.[namespace] ?? {}) : errorsAll ?? {};
 
   const [countries, setCountries] = useState<ICountry[] | null>(null);
-  const detachableRegister = useDetachableForm(formMethods, disabled || false);
 
   useEffect(() => {
     let canceled = false;
@@ -72,17 +77,6 @@ function AddressForm(props: Props) {
 
   if (countries === null) return null;
 
-  // ตัวอย่างการใช้ getFieldState
-  const firstNameState = getFieldState(fieldName('firstName'), formState);
-  const lastNameState = getFieldState(fieldName('lastName'), formState);
-  const countryState = getFieldState(fieldName('country'), formState);
-  const address1State = getFieldState(fieldName('address1'), formState);
-  const cityState = getFieldState(fieldName('city'), formState);
-  const stateState = getFieldState(fieldName('state'), formState);
-  const postcodeState = getFieldState(fieldName('postcode'), formState);
-  const emailState = getFieldState(fieldName('email'), formState);
-  const phoneState = getFieldState(fieldName('phone'), formState);
-
   return (
     <>
       <div className="form-row">
@@ -93,13 +87,13 @@ function AddressForm(props: Props) {
           <input
             type="text"
             id={`${fieldId}first-name`}
-            className={classNames('form-control', { 'is-invalid': !!firstNameState.error })}
+            className={classNames('form-control', { 'is-invalid': !!errors?.firstName })}
             disabled={disabled}
-            placeholder={intl.formatMessage({ id: 'INPUT_FIRST_NAME_PLACEHOLDER' })}
+            placeholder="Mark"
             {...detachableRegister(fieldName('firstName'), { required: true })}
           />
           <div className="invalid-feedback">
-            {firstNameState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+            {errors?.firstName?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
           </div>
         </div>
 
@@ -110,13 +104,13 @@ function AddressForm(props: Props) {
           <input
             type="text"
             id={`${fieldId}last-name`}
-            className={classNames('form-control', { 'is-invalid': !!lastNameState.error })}
+            className={classNames('form-control', { 'is-invalid': !!errors?.lastName })}
             disabled={disabled}
-            placeholder={intl.formatMessage({ id: 'INPUT_LAST_NAME_PLACEHOLDER' })}
+            placeholder="Twain"
             {...detachableRegister(fieldName('lastName'), { required: true })}
           />
           <div className="invalid-feedback">
-            {lastNameState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+            {errors?.lastName?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
           </div>
         </div>
       </div>
@@ -131,7 +125,7 @@ function AddressForm(props: Props) {
           id={`${fieldId}company-name`}
           className="form-control"
           disabled={disabled}
-          placeholder={intl.formatMessage({ id: 'INPUT_COMPANY_PLACEHOLDER' })}
+          placeholder="Wipat Autoparts"
           {...detachableRegister(fieldName('company'))}
         />
       </div>
@@ -142,19 +136,19 @@ function AddressForm(props: Props) {
         </label>
         <select
           id={`${fieldId}country`}
-          className={classNames('form-control', { 'is-invalid': !!countryState.error })}
+          className={classNames('form-control', { 'is-invalid': !!errors?.country })}
           disabled={disabled}
           {...detachableRegister(fieldName('country'), { required: true })}
         >
-          <option value="">{intl.formatMessage({ id: 'INPUT_COUNTRY_PLACEHOLDER' })}</option>
+          <option value=""><FormattedMessage id="INPUT_COUNTRY_PLACEHOLDER" /></option>
           {countries?.map((c) => (
             <option key={c.code} value={c.code}>
-              {intl.formatMessage({ id: `COUNTRY_NAME_${c.code}` })}
+              <FormattedMessage id={`COUNTRY_NAME_${c.code}`} />
             </option>
           ))}
         </select>
         <div className="invalid-feedback">
-          {countryState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+          {errors?.country?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
         </div>
       </div>
 
@@ -165,13 +159,13 @@ function AddressForm(props: Props) {
         <input
           type="text"
           id={`${fieldId}address1`}
-          className={classNames('form-control', { 'is-invalid': !!address1State.error })}
+          className={classNames('form-control', { 'is-invalid': !!errors?.address1 })}
           disabled={disabled}
-          placeholder={intl.formatMessage({ id: 'INPUT_STREET_ADDRESS_PLACEHOLDER_1' })}
+          placeholder="House number and street name"
           {...detachableRegister(fieldName('address1'), { required: true })}
         />
         <div className="invalid-feedback">
-          {address1State.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+          {errors?.address1?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
         </div>
 
         <label htmlFor={`${fieldId}address2`} className="sr-only">
@@ -182,7 +176,7 @@ function AddressForm(props: Props) {
           id={`${fieldId}address2`}
           className="form-control mt-2"
           disabled={disabled}
-          placeholder={intl.formatMessage({ id: 'INPUT_STREET_ADDRESS_PLACEHOLDER_2' })}
+          placeholder="Apartment, suite, unit etc."
           {...detachableRegister(fieldName('address2'))}
         />
       </div>
@@ -194,13 +188,13 @@ function AddressForm(props: Props) {
         <input
           type="text"
           id={`${fieldId}city`}
-          className={classNames('form-control', { 'is-invalid': !!cityState.error })}
+          className={classNames('form-control', { 'is-invalid': !!errors?.city })}
           disabled={disabled}
-          placeholder={intl.formatMessage({ id: 'INPUT_CITY_PLACEHOLDER' })}
+          placeholder="Houston"
           {...detachableRegister(fieldName('city'), { required: true })}
         />
         <div className="invalid-feedback">
-          {cityState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+          {errors?.city?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
         </div>
       </div>
 
@@ -211,13 +205,13 @@ function AddressForm(props: Props) {
         <input
           type="text"
           id={`${fieldId}state`}
-          className={classNames('form-control', { 'is-invalid': !!stateState.error })}
+          className={classNames('form-control', { 'is-invalid': !!errors?.state })}
           disabled={disabled}
-          placeholder={intl.formatMessage({ id: 'INPUT_STATE_PLACEHOLDER' })}
+          placeholder="Texas"
           {...detachableRegister(fieldName('state'), { required: true })}
         />
         <div className="invalid-feedback">
-          {stateState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+          {errors?.state?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
         </div>
       </div>
 
@@ -228,13 +222,13 @@ function AddressForm(props: Props) {
         <input
           type="text"
           id={`${fieldId}postcode`}
-          className={classNames('form-control', { 'is-invalid': !!postcodeState.error })}
+          className={classNames('form-control', { 'is-invalid': !!errors?.postcode })}
           disabled={disabled}
-          placeholder={intl.formatMessage({ id: 'INPUT_POSTCODE_PLACEHOLDER' })}
+          placeholder="19720"
           {...detachableRegister(fieldName('postcode'), { required: true })}
         />
         <div className="invalid-feedback">
-          {postcodeState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+          {errors?.postcode?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
         </div>
       </div>
 
@@ -246,14 +240,17 @@ function AddressForm(props: Props) {
           <input
             type="email"
             id={`${fieldId}email`}
-            className={classNames('form-control', { 'is-invalid': !!emailState.error })}
+            className={classNames('form-control', { 'is-invalid': !!errors?.email })}
             disabled={disabled}
-            placeholder={intl.formatMessage({ id: 'INPUT_EMAIL_ADDRESS_PLACEHOLDER' })}
-            {...detachableRegister(fieldName('email'), { required: true, validate: { email: validateEmail } })}
+            placeholder="user@example.com"
+            {...detachableRegister(fieldName('email'), {
+              required: true,
+              validate: { email: validateEmail },
+            })}
           />
           <div className="invalid-feedback">
-            {emailState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
-            {emailState.error?.type === 'email' && <FormattedMessage id="ERROR_FORM_INCORRECT_EMAIL" />}
+            {errors?.email?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+            {errors?.email?.type === 'email' && <FormattedMessage id="ERROR_FORM_INCORRECT_EMAIL" />}
           </div>
         </div>
 
@@ -264,13 +261,13 @@ function AddressForm(props: Props) {
           <input
             type="text"
             id={`${fieldId}phone`}
-            className={classNames('form-control', { 'is-invalid': !!phoneState.error })}
+            className={classNames('form-control', { 'is-invalid': !!errors?.phone })}
             disabled={disabled}
-            placeholder={intl.formatMessage({ id: 'INPUT_PHONE_NUMBER_PLACEHOLDER' })}
+            placeholder="+1 999 888 7777"
             {...detachableRegister(fieldName('phone'), { required: true })}
           />
           <div className="invalid-feedback">
-            {phoneState.error?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
+            {errors?.phone?.type === 'required' && <FormattedMessage id="ERROR_FORM_REQUIRED" />}
           </div>
         </div>
       </div>
