@@ -7,7 +7,7 @@ import { getNextReviewId, reviews } from '~/fake-server/database/reviews';
 import { IProductsList, IProduct } from '~/interfaces/product';
 import { IReview } from '~/interfaces/review';
 import { prepareCategory } from '~/fake-server/endpoints/categories';
-import { products as dbProducts } from '~/fake-server/database/products';
+//import { products as dbProducts } from '~/fake-server/database/products';
 import { RadioFilterBuilder } from '~/fake-server/filters/radio-filter-builder';
 import { RangeFilterBuilder } from '~/fake-server/filters/range-filter-builder';
 import { RatingFilterBuilder } from '~/fake-server/filters/rating-filter-builder';
@@ -31,6 +31,70 @@ import {
     IGetSearchSuggestionsOptions,
     IGetSearchSuggestionsResult,
 } from '~/api/base';
+
+// ใช้ JSON ที่ export มาจาก Odoo
+import exportedProducts from '~/data/products.json';
+import type { IShopCategory } from '~/interfaces/category';
+
+// ----- ชนิดข้อมูลฝั่ง export -----
+type ExportedProduct = {
+  name: string;
+  slug: string;
+  sku: string;
+  price: number;
+  images: string[];
+  videos?: string[];
+  description: string;       // เป็น HTML <p>...</p> แล้ว
+  category_slugs?: string[];
+};
+
+// สร้าง id แบบคงที่จาก slug (number) ให้ระบบเดิมใช้ทำ cursor/page ได้
+function hashToInt(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h) || 1;
+}
+
+// แปลง ExportedProduct -> IProduct ให้เข้ากับ UI/ฟิลเตอร์เดิม
+const dbProducts: IProduct[] = (exportedProducts as ExportedProduct[]).map((p) => {
+  const categories: IShopCategory[] = (p.category_slugs ?? [])
+    .map((slug) => shopCategoriesList.find((x) => x.slug === slug))
+    .map((x) => (x ? prepareCategory(x) : null))
+    .filter((x): x is IShopCategory => !!x);
+
+  return {
+    id: hashToInt(p.slug),
+    name: p.name,
+    excerpt: '',
+    description: p.description,   // ฝั่ง Odoo แปลงเป็น <p> เรียบร้อย
+    slug: p.slug,
+    sku: p.sku,
+    partNumber: '',
+    stock: 'in-stock',
+    price: p.price,
+    compareAtPrice: null,
+    images: p.images,
+    badges: [],                   // ยังไม่ได้ใช้ → ว่างไว้
+    rating: 0,                    // ถ้าอยากมีเรตติ้ง ค่อยเติมภายหลัง
+    reviews: 0,
+    availability: 'in-stock',
+    compatibility: 'all',
+    brand: { slug: 'misc', name: 'Misc', image: '', country: 'TH' }, // ดีฟอลต์
+    type: {
+      slug: 'default',
+      name: 'Default',
+      attributeGroups: [],        // ไม่ใช้ก็ปล่อยว่าง
+    },
+    attributes: [],
+    options: [],
+    tags: [],
+    categories,
+    customFields: {},
+  };
+});
+
 
 function getProducts(shift: number, categorySlug: string | null = null): IProduct[] {
     let shiftValue = shift;
