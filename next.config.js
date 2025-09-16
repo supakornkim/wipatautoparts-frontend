@@ -25,7 +25,13 @@ const nextConfig = {
       issuer: /\.[jt]sx?$/,
       use: [{ loader: '@svgr/webpack', options: { svgo: true, titleProp: true } }],
     });
-
+    
+    // --- สำคัญ: alias next/link -> patched link ---
+    config.resolve = config.resolve || {};
+    config.resolve.alias = config.resolve.alias || {};
+    // ใช้ $ เพื่อ match แบบ exact module ชื่อ 'next/link'
+    config.resolve.alias['next/link$'] = path.resolve(__dirname, 'src/patch/PatchedLink.tsx');
+    
     return config;
   },
 };
