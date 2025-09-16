@@ -1,6 +1,8 @@
+import '~/patch/patchRouter'; // <-- add this line
 // react
 import React, { ComponentType, useEffect, useMemo } from 'react';
 // third-party
+import '~/patch/patchRouter'; // ⬅️ ต้องมาก่อนการเรนเดอร์ใด ๆ
 import AppBase, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import { NextComponentType, NextPageContext } from 'next';
