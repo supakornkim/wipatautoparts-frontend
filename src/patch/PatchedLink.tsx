@@ -64,6 +64,9 @@ export default function PatchedLink(props: MinimalLinkProps) {
       ? '/catalog'
       : as;
   // @ts-ignore
+  console.log(href);
+  console.log(as);
+  console.log(props);
  const hPath = typeof href === 'string' ? href : (href as any)?.pathname;
     const aPath = typeof as === 'string' ? as : (as as any)?.pathname;
     if (isCatchAll(hPath) || isCatchAll(aPath)) {
