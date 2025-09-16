@@ -56,6 +56,10 @@ function normalizeHref(href: MinimalLinkProps['href'], as?: MinimalLinkProps['as
   return href;
 }
 
+function isCatchAll(p?: string) {
+  return p === '/catalog/[...segments]' || p === '/catalog/[[...segments]]';
+}
+
 export default function PatchedLink(props: MinimalLinkProps) {
   const { href, as, children, ...rest } = props;
   const safeHref = normalizeHref(href, as);
@@ -64,5 +68,11 @@ export default function PatchedLink(props: MinimalLinkProps) {
       ? '/catalog'
       : as;
   // @ts-ignore
+
+  if (isCatchAll(hPath) || isCatchAll(aPath)) {
+      // eslint-disable-next-line no-console
+      console.warn('[PatchedLink] catch-all link', { href, as, stack: new Error().stack });
+    }
+  
   return <NextLink href={safeHref} as={safeAs} {...rest}>{children}</NextLink>;
 }
