@@ -64,7 +64,9 @@ export default function PatchedLink(props: MinimalLinkProps) {
       ? '/catalog'
       : as;
   // @ts-ignore
-
+  console.log(props)
+  console.log(as)
+  console.log(href)
   if (isCatchAll(hPath) || isCatchAll(aPath)) {
       // eslint-disable-next-line no-console
       console.warn('[PatchedLink] catch-all link', { href, as, stack: new Error().stack });
