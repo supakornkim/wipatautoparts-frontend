@@ -64,10 +64,9 @@ export default function PatchedLink(props: MinimalLinkProps) {
       ? '/catalog'
       : as;
   // @ts-ignore
-  console.log(props)
-  console.log(as)
-  console.log(href)
-  if (isCatchAll(hPath) || isCatchAll(aPath)) {
+ const hPath = typeof href === 'string' ? href : (href as any)?.pathname;
+    const aPath = typeof as === 'string' ? as : (as as any)?.pathname;
+    if (isCatchAll(hPath) || isCatchAll(aPath)) {
       // eslint-disable-next-line no-console
       console.warn('[PatchedLink] catch-all link', { href, as, stack: new Error().stack });
     }
