@@ -58,11 +58,15 @@ function hashToInt(s: string): number {
 }
 
 // แปลง ExportedProduct -> IProduct ให้เข้ากับ UI/ฟิลเตอร์เดิม
+// แปลง ExportedProduct -> IProduct ให้เข้ากับ UI/ฟิลเตอร์เดิม
 const dbProducts: IProduct[] = (exportedProducts as ExportedProduct[]).map((p) => {
-  const categories: IShopCategory[] = (p.category_slugs ?? [])
+  // 1) หา category จาก shopCategoriesList (ตอนนี้เป็นชนิด IShopCategory & { fullSlug: string })
+  const foundCats = (p.category_slugs ?? [])
     .map((slug) => shopCategoriesList.find((x) => x.slug === slug))
-    .map((x) => (x ? prepareCategory(x) : null))
-    .filter((x): x is IShopCategory => !!x);
+    .filter((x): x is NonNullable<typeof x> => !!x) as (IShopCategory & { fullSlug: string })[];
+
+  // 2) แปลงให้เป็น IShopCategory “ปกติ” ด้วย prepareCategory (ตัด field เสริมออก)
+  const categories: IShopCategory[] = foundCats.map((c) => prepareCategory(c));
 
   return {
     id: hashToInt(p.slug),
@@ -77,16 +81,12 @@ const dbProducts: IProduct[] = (exportedProducts as ExportedProduct[]).map((p) =
     compareAtPrice: null,
     images: p.images,
     badges: [],                   // ยังไม่ได้ใช้ → ว่างไว้
-    rating: 0,                    // ถ้าอยากมีเรตติ้ง ค่อยเติมภายหลัง
+    rating: 0,
     reviews: 0,
     availability: 'in-stock',
     compatibility: 'all',
-    brand: { slug: 'misc', name: 'Misc', image: '', country: 'TH' }, // ดีฟอลต์
-    type: {
-      slug: 'default',
-      name: 'Default',
-      attributeGroups: [],        // ไม่ใช้ก็ปล่อยว่าง
-    },
+    brand: { slug: 'misc', name: 'Misc', image: '', country: 'TH' },
+    type: { slug: 'default', name: 'Default', attributeGroups: [] },
     attributes: [],
     options: [],
     tags: [],
@@ -94,6 +94,7 @@ const dbProducts: IProduct[] = (exportedProducts as ExportedProduct[]).map((p) =
     customFields: {},
   };
 });
+
 
 
 function getProducts(shift: number, categorySlug: string | null = null): IProduct[] {

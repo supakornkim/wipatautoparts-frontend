@@ -1,3 +1,5 @@
+// src/fake-server/database/categories.ts
+
 // application
 import { ICategoryDef } from '~/fake-server/interfaces/category-def';
 import { makeIdGenerator } from '~/fake-server/utils';
@@ -8,21 +10,40 @@ import {
     IShopCategory,
 } from '~/interfaces/category';
 
+type WithFull = { fullSlug: string };
+
 const getNextId = makeIdGenerator();
 
-function makeShopCategory(def: ICategoryDef, parent: IShopCategory | null): IShopCategory {
+/** sanitize เฉพาะที่จำเป็น:
+ * - ตัด / นำหน้า (ป้องกันชน route อื่นเวลาต่อ path)
+ * - trim() ช่องว่าง
+ */
+function sanitizeSlug(raw: string): string {
+    const s = (raw ?? '').toString().trim();
+    return s.replace(/^\/+/, ''); // remove leading slashes
+}
+
+function makeShopCategory(
+    def: ICategoryDef,
+    parent: (IShopCategory & WithFull) | null
+): IShopCategory & WithFull {
+    const slug = sanitizeSlug(def.slug);
+    const fullSlug = parent ? `${parent.fullSlug}/${slug}` : slug;
+
     return {
         id: getNextId(),
         type: 'shop',
         name: def.name,
-        slug: def.slug,
+        slug,
         image: def.image || null,
         items: def.items,
         parent,
         children: [],
         layout: def.layout ? def.layout : 'products',
         customFields: {},
-    };
+        // เพิ่ม path เต็มของหมวด
+        fullSlug,
+    } as any;
 }
 
 function makeBlogCategory(def: ICategoryDef, parent: IBlogCategory | null): IBlogCategory {
@@ -39,15 +60,18 @@ function makeBlogCategory(def: ICategoryDef, parent: IBlogCategory | null): IBlo
     };
 }
 
+/** generic builder ของ tree
+ * NOTE: ใช้ any เพื่อให้ง่าย ไม่ต้องแก้ interface อื่น ๆ
+ */
 function makeCategories<T extends IBaseCategory>(
-    makeFn: (def: ICategoryDef, parent: T | null) => T,
+    makeFn: (def: ICategoryDef, parent: any | null) => any,
     defs: ICategoryDef[],
-    parent: T | null = null,
-): T[] {
-    const categories: T[] = [];
+    parent: any | null = null,
+): any[] {
+    const categories: any[] = [];
 
     defs.forEach((def) => {
-        const category: T = makeFn(def, parent);
+        const category: any = makeFn(def, parent);
 
         if (def.children) {
             category.children = makeCategories(makeFn, def.children, category);
@@ -69,155 +93,120 @@ function flatTree<T extends ICategory>(categories: T[]): T[] {
     return result;
 }
 
+// ------------------- หมวด (Data เดิมของคุณ) -------------------
 const shopCategoriesDef: ICategoryDef[] = [
-    {
-        name: 'ไส้กรอง',
-        slug: 'ไส้กรอง',
-        image: '/images/categories/category-1.jpg',
-        items: 131,
+  {
+    name: 'ไส้กรอง',
+    slug: 'filters', // เดิม 'ไส้กรอง'
+    image: '/images/categories/category-1.jpg',
+    items: 131,
+    children: [
+      {
+        name: 'กรองน้ำมันเครื่อง',
+        slug: 'oil-filter',
         children: [
-            { 
-                name: 'กรองน้ำมันเครื่อง', 
-                slug: 'turn-signals',
-                children: [
-                    { name: 'กรองน้ำมันเครื่อง-รถญี่ปุ่น', slug: 'japan' },
-                    { name: 'กรองน้ำมันเครื่อง-รถยุโรป', slug: 'europe' },
-                    { name: 'กรองน้ำมันเครื่อง-รถมอเตอร์ไซค์', slug: 'motorcycle' },
-                ],
-            },
-            { 
-                name: 'กรองอากาศ', 
-                slug: 'air-filter',
-                children: [
-                    { name: 'กรองอากาศ-รถญี่ปุ่น', slug: 'japan' },
-                    { name: 'กรองอากาศ-รถยุโรป', slug: 'europe' },
-                ],
-            },
-            { 
-                name: 'กรองแอร์', 
-                slug: 'cabin-filter',
-                children: [
-                    { name: 'รถญี่ปุ่น', slug: 'air-japan' },
-                    { name: 'รถยุโรป', slug: 'europe' },
-                    { name: 'รถมอเตอร์ไซค์', slug: 'motorcycle' },
-                ],
-            },
+          { name: 'กรองน้ำมันเครื่อง-รถญี่ปุ่น', slug: 'japanese-cars' },
+          { name: 'กรองน้ำมันเครื่อง-รถยุโรป', slug: 'european-cars' },
+          { name: 'กรองน้ำมันเครื่อง-รถมอเตอร์ไซค์', slug: 'motorcycles' },
         ],
-    },
-    {
-        name: 'ช่วงล่างและลูกปืน',
-        slug: 'ช่วงล่างและลูกปืน',
-        image: '/images/categories/category-1.jpg',
-        items: 131,
+      },
+      {
+        name: 'กรองอากาศ',
+        slug: 'air-filter',
         children: [
-            { 
-                name: 'โช้คอัพ', 
-                slug: 'turn-signals',
-                children: [
-                    { name: 'โช้คอัพหน้า', slug: 'japan' },
-                    { name: 'โช้คอัพหลัง', slug: 'europe' },
-                ],
-            },
-            { 
-                name: 'สปริงโช้ค', 
-                slug: 'air-filter',
-                children: [
-                    { name: 'สปริงโช้คหน้า', slug: 'japan' },
-                    { name: 'สปริงโช้คหลัง', slug: 'europe' },
-                ],
-            },
-            { name: 'แร็คพวงมาลัย', slug: 'dashboards' },
-            { name: 'เพลาขับ', slug: 'dashboards' },
-            { name: 'แหนบรถยนต์', slug: 'dashboards' },
-            { name: 'โตงแตง สาแหรก สะดือแหนบ', slug: 'dashboards' },
-            { name: 'ลูกปืน', slug: 'dashboards' },
-            { 
-                name: 'ลูกหมาก', 
-                slug: '33',
-                children: [
-                    { name: 'รถมอเตอร์ไซค์', slug: 'motorcycle' },
-                    { name: 'ลูกหมากกันโคลงหน้า', slug: '1' },
-                    { name: 'ลูกหมากกันโคลงหลัง', slug: '2' },
-                    { name: 'ลูกหมากปีกนกล่าง', slug: '3' },
-                    { name: 'ลูกหมากปีกนกบน', slug: '4' },
-                    { name: 'ลูกหมากแร็ค​(ไม้ตีกลอง)', slug: '5' },
-                    { name: 'ลูกหมากปีกคันชัก', slug: '6' },
-                    { name: 'กล้องยา', slug: '7' },
-                    { name: 'คันส่งต่างๆ', slug: '8' },
-                ],
-            },
-            { 
-                name: 'ปีกนก', 
-                slug: '332',
-                children: [
-                    { name: 'ปีกนกบน', slug: '4' },
-                    { name: 'ปีกนกล่าง', slug: '22' },
-                    { name: 'สลักปีกนก', slug: '3' },
-                ],
-            },
-            { 
-                name: 'บุชและยางต่างๆ', 
-                slug: '332',
-                children: [
-                    { name: 'บุชปีกนก', slug: '/catalog/products' },
-                    { name: 'บุชหูแหนบ', slug: '/catalog/products' },
-                    { name: 'บุชหูโช้ค', slug: '/catalog/products' },
-                    { name: 'ยางกันโคลง', slug: '/catalog/products' },
-                    { name: 'สกรูกันโคลง', slug: '/catalog/products' },
-                    { name: 'ยางกันกระแทกโช้คอัพ', slug: '/catalog/products' },
-                    { name: 'ยางกันฝุ่นโช้คอัพ', slug: '/catalog/products' },
-                    { name: 'ยางรองสปริง', slug: '/catalog/products' },
-                    { name: 'เบ้าโช้ค ลูกปืนเบ้าโช้ค', slug: '/catalog/products' },
-                    { name: 'ยางกันฝุ่นแร็ค', slug: '/catalog/products' },
-                    { name: 'ยางหุ้มเพลาขับ', slug: '/catalog/products' },
-                    { name: 'ยางหิ้วเพลากลาง', slug: '/catalog/products' },
-                ],
-            },
+          { name: 'กรองอากาศ-รถญี่ปุ่น', slug: 'japanese-cars' },
+          { name: 'กรองอากาศ-รถยุโรป', slug: 'european-cars' },
         ],
-    },
-    {
-        name: 'ระบบเบรก',
-        slug: 'ระบบเบรก',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-    {
-        name: 'ห้องเครื่องยนต์ เกียร์และคลัทช์',
-        slug: 'ห้องเครื่องยนต์ เกียร์และคลัทช์',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-    {
-        name: 'ของเหลว และสารหล่อลื่น',
-        slug: 'ของเหลว และสารหล่อลื่น',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-    {
-        name: 'อุปกรณ์ส่องสว่าง',
-        slug: 'tires-wheels',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-    {
-        name: 'ใบปัดน้ำฝน',
-        slug: 'interior-parts',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-    {
-        name: 'ผลิตภัณฑ์ดูแลรถยนต์',
-        slug: 'engine-drivetrain',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-    {
-        name: 'อุปกรณ์ติดรถอื่นๆและของแต่ง',
-        slug: 'อุปกรณ์ติดรถอื่นๆและของแต่ง',
-        image: '/images/categories/category-7.jpg',
-        items: 179,
-    },
-
+      },
+      {
+        name: 'กรองแอร์',
+        slug: 'cabin-filter',
+        children: [
+          { name: 'กรองแอร์-รถญี่ปุ่น', slug: 'japanese-cars' },
+          { name: 'กรองแอร์-รถยุโรป', slug: 'european-cars' },
+          { name: 'กรองแอร์-รถมอเตอร์ไซค์', slug: 'motorcycles' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'ช่วงล่างและลูกปืน',
+    slug: 'suspension-bearings', // เดิม 'ช่วงล่างและลูกปืน'
+    image: '/images/categories/category-1.jpg',
+    items: 131,
+    children: [
+      {
+        name: 'โช้คอัพ',
+        slug: 'shock-absorbers',
+        children: [
+          { name: 'โช้คอัพหน้า', slug: 'front' },
+          { name: 'โช้คอัพหลัง', slug: 'rear' },
+        ],
+      },
+      {
+        name: 'สปริงโช้ค',
+        slug: 'coil-springs',
+        children: [
+          { name: 'สปริงโช้คหน้า', slug: 'front' },
+          { name: 'สปริงโช้คหลัง', slug: 'rear' },
+        ],
+      },
+      { name: 'แร็คพวงมาลัย', slug: 'steering-rack' },
+      { name: 'เพลาขับ', slug: 'drive-shaft' },
+      { name: 'แหนบรถยนต์', slug: 'leaf-springs' },
+      { name: 'โตงแตง สาแหรก สะดือแหนบ', slug: 'suspension-links' }, // เดิม 'dashboards' (ผิดหมวด)
+      { name: 'ลูกปืน', slug: 'bearings' },
+      {
+        name: 'ลูกหมาก',
+        slug: 'ball-joints', // เดิม '33'
+        children: [
+          { name: 'รถมอเตอร์ไซค์', slug: 'motorcycles' },
+          { name: 'ลูกหมากกันโคลงหน้า', slug: 'front-stabilizer-links' },
+          { name: 'ลูกหมากกันโคลงหลัง', slug: 'rear-stabilizer-links' },
+          { name: 'ลูกหมากปีกนกล่าง', slug: 'lower-arm-ball-joint' },
+          { name: 'ลูกหมากปีกนกบน', slug: 'upper-arm-ball-joint' },
+          { name: 'ลูกหมากแร็ค​(ไม้ตีกลอง)', slug: 'tie-rod-ends' },
+          { name: 'ลูกหมากปีกคันชัก', slug: 'drag-link' },
+          { name: 'กล้องยา', slug: 'idler-arm' },
+          { name: 'คันส่งต่างๆ', slug: 'linkages' },
+        ],
+      },
+      {
+        name: 'ปีกนก',
+        slug: 'control-arms', // เดิม '332'
+        children: [
+          { name: 'ปีกนกบน', slug: 'upper' },   // เดิม '4'
+          { name: 'ปีกนกล่าง', slug: 'lower' }, // เดิม '22'
+          { name: 'สลักปีกนก', slug: 'control-arm-bolts' }, // เดิม '3'
+        ],
+      },
+      {
+        name: 'บุชและยางต่างๆ',
+        slug: 'bushings-rubbers', // เดิม '332'
+        children: [
+          { name: 'บุชปีกนก', slug: 'control-arm-bushings' },
+          { name: 'บุชหูแหนบ', slug: 'leaf-spring-bushings' },
+          { name: 'บุชหูโช้ค', slug: 'shock-eye-bushings' },
+          { name: 'ยางกันโคลง', slug: 'stabilizer-bushings' },
+          { name: 'สกรูกันโคลง', slug: 'stabilizer-links' },
+          { name: 'ยางกันกระแทกโช้คอัพ', slug: 'bump-stops' },
+          { name: 'ยางกันฝุ่นโช้คอัพ', slug: 'shock-dust-covers' },
+          { name: 'ยางรองสปริง', slug: 'spring-seats' },
+          { name: 'เบ้าโช้ค ลูกปืนเบ้าโช้ค', slug: 'strut-mounts' },
+          { name: 'ยางกันฝุ่นแร็ค', slug: 'rack-boots' },
+          { name: 'ยางหุ้มเพลาขับ', slug: 'cv-boots' },
+          { name: 'ยางหิ้วเพลากลาง', slug: 'center-bearing-supports' },
+        ],
+      },
+    ],
+  },
+  { name: 'ระบบเบรก', slug: 'brake-system', image: '/images/categories/category-7.jpg', items: 179 },
+  { name: 'ห้องเครื่องยนต์ เกียร์และคลัทช์', slug: 'engine-gearbox-clutch', image: '/images/categories/category-7.jpg', items: 179 },
+  { name: 'ของเหลว และสารหล่อลื่น', slug: 'fluids-lubricants', image: '/images/categories/category-7.jpg', items: 179 },
+  { name: 'อุปกรณ์ส่องสว่าง', slug: 'lighting', image: '/images/categories/category-7.jpg', items: 179 }, // เดิม 'tires-wheels'
+  { name: 'ใบปัดน้ำฝน', slug: 'wiper-blades', image: '/images/categories/category-7.jpg', items: 179 },   // เดิม 'interior-parts'
+  { name: 'ผลิตภัณฑ์ดูแลรถยนต์', slug: 'car-care', image: '/images/categories/category-7.jpg', items: 179 }, // เดิม 'engine-drivetrain'
+  { name: 'อุปกรณ์ติดรถอื่นๆและของแต่ง', slug: 'accessories', image: '/images/categories/category-7.jpg', items: 179 },
 ];
 
 const blogCategoriesDef: ICategoryDef[] = [
@@ -277,10 +266,20 @@ const blogCategoriesDef: ICategoryDef[] = [
     },
 ];
 
-export const shopCategoriesTree: IShopCategory[] = makeCategories(makeShopCategory, shopCategoriesDef);
+// ---------- Build & Export ----------
+export const shopCategoriesTree: (IShopCategory & WithFull)[] =
+    makeCategories(makeShopCategory as any, shopCategoriesDef) as any;
 
-export const shopCategoriesList: IShopCategory[] = flatTree(shopCategoriesTree);
+export const shopCategoriesList: (IShopCategory & WithFull)[] =
+    flatTree(shopCategoriesTree) as any;
 
-export const blogCategoriesTree: IBlogCategory[] = makeCategories(makeBlogCategory, blogCategoriesDef);
+export const blogCategoriesTree: IBlogCategory[] =
+    makeCategories(makeBlogCategory, blogCategoriesDef);
 
-export const blogCategoriesList: IBlogCategory[] = flatTree(blogCategoriesTree);
+export const blogCategoriesList: IBlogCategory[] =
+    flatTree(blogCategoriesTree);
+
+// ดัชนีสำหรับค้นหาด้วย fullSlug
+export const shopCategoriesByFullSlug = new Map<string, IShopCategory & WithFull>(
+    shopCategoriesList.map((c) => [c.fullSlug, c])
+);

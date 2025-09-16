@@ -24,28 +24,50 @@ type INormalizedLinkProps = Omit<LinkProps, 'href' | 'as'> & {
 };
 
 export function normalizeHref(href: string | UrlObject): INormalizedUrlObject {
-    const result = {
-        ...(parseUrl(typeof href === 'string' ? href : formatUrl(href), true)),
-    } as (Partial<Url> & { query: ParsedUrlQuery });
+  const result = {
+    ...(parseUrl(typeof href === 'string' ? href : formatUrl(href), true)),
+  } as (Partial<Url> & { query: ParsedUrlQuery });
 
-    delete result.host;
-    delete result.href;
-    delete result.path;
-    delete result.search;
+  delete result.host;
+  delete result.href;
+  delete result.path;
+  delete result.search;
 
-    result.query = result.query || {};
+  result.query = result.query || {};
 
-    return result;
+  return result as INormalizedUrlObject;
+}
+
+// ⬇️ เพิ่ม helper นี้
+function concreteCatalogIfCatchAll(obj: INormalizedUrlObject): INormalizedUrlObject {
+  const p = obj.pathname || '';
+  if (p === '/catalog/[...segments]' || p === '/catalog/[[...segments]]') {
+    const seg: unknown = (obj.query as any)?.segments;
+    const arr = Array.isArray(seg) ? seg
+              : typeof seg === 'string' ? [seg]
+              : [];
+    const path = arr.length ? `/catalog/${arr.join('/')}` : '/catalog';
+    return normalizeHref(path);
+  }
+  return obj;
 }
 
 export function normalizeLinkHref(data: IAppLinkHref): INormalizedLinkProps {
-    const result = typeof data === 'string' ? { href: data } : data;
+  const result = typeof data === 'string' ? { href: data } : data;
 
-    return {
-        ...result,
-        href: normalizeHref(result.href),
-        as: normalizeHref(result.as || result.href),
-    };
+  // เดิม: แปลงเป็น UrlObject ปกติ
+  const hrefObj = normalizeHref(result.href);
+  const asObj   = normalizeHref(result.as || result.href);
+
+  // ⬇️ ใหม่: บังคับให้ catch-all กลายเป็น path จริงเสมอ
+  const safeHref = concreteCatalogIfCatchAll(hrefObj);
+  const safeAs   = concreteCatalogIfCatchAll(asObj);
+
+  return {
+    ...(result as any),
+    href: safeHref,
+    as: safeAs,
+  };
 }
 
 type AnchorProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>;
