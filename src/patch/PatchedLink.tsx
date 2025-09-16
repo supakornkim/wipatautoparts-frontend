@@ -1,11 +1,9 @@
 // src/patch/PatchedLink.tsx
 import React from 'react';
-// นำเข้า "Link ของ Next ตัวจริง" จาก internal path เพื่อเลี่ยง alias วน
-// (อย่าใช้ 'next/link' ที่นี่ ไม่งั้นจะชี้กลับมาหาไฟล์นี้เอง)
+// ใช้ internal path เพื่อหลบ alias ตัวเอง
 import NextLink from 'next/dist/client/link';
 import type { UrlObject } from 'url';
 
-// ชนิดขั้นต่ำสุดที่เราต้องใช้ (ลดการพึ่งพา type จาก 'next/link' เพื่อไม่เจอ alias)
 type MinimalLinkProps = {
   href: string | UrlObject;
   as?: string | UrlObject;
@@ -26,7 +24,7 @@ function isCatchAll(path?: string) {
   return path === '/catalog/[...segments]' || path === '/catalog/[[...segments]]';
 }
 
-function segmentsFrom(obj?: UrlObject | string): string[] | null {
+function segsFrom(obj?: UrlObject | string): string[] | null {
   if (!obj || typeof obj === 'string') return null;
   // @ts-ignore
   const seg = obj.query?.segments as unknown;
@@ -40,7 +38,6 @@ function toCatalogPath(segs: string[] | null) {
 }
 
 function normalizeHref(href: MinimalLinkProps['href'], as?: MinimalLinkProps['as']) {
-  // href เป็น string
   if (typeof href === 'string') {
     if (isCatchAll(href)) {
       if (typeof as === 'string' && as.startsWith('/catalog/')) return as;
@@ -48,17 +45,14 @@ function normalizeHref(href: MinimalLinkProps['href'], as?: MinimalLinkProps['as
     }
     return href;
   }
-
-  // href เป็น UrlObject
   const pathname = href.pathname as string | undefined;
   if (isCatchAll(pathname)) {
-    const seg = segmentsFrom(href);
+    const seg = segsFrom(href);
     if (seg) return toCatalogPath(seg);
     if (typeof as === 'string' && as.startsWith('/catalog/')) return as;
     if (as && typeof as === 'object' && typeof as.pathname === 'string') return as.pathname as string;
     return '/catalog';
   }
-
   return href;
 }
 
@@ -69,8 +63,6 @@ export default function PatchedLink(props: MinimalLinkProps) {
     typeof as === 'string' && isCatchAll(as)
       ? '/catalog'
       : as;
-
-  // ส่งต่อให้ Link ของ Next ตัวจริง
   // @ts-ignore
   return <NextLink href={safeHref} as={safeAs} {...rest}>{children}</NextLink>;
 }
