@@ -84,6 +84,7 @@ function AppLink(props: Props) {
         anchor = false,
         ...anchorProps
     } = props;
+    console.log(props);
     const href = hrefProp || '/';
     const data = normalizeLinkHref(href || '');
     const isExternal = !!data.href.hostname;
@@ -101,7 +102,9 @@ function AppLink(props: Props) {
 
         return <a href={anchorHref} {...anchorProps}>{children}</a>;
     }
-
+    console.log(data);
+    console.log(anchorProps);
+    
     return (
         <Link {...data}>
             <a {...anchorProps}>{children}</a>
